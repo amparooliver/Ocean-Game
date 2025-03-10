@@ -264,6 +264,27 @@
             font-size: 70%;
             letter-spacing: 5px;
         }
+        #game-footer {
+            text-align: center;
+            margin-top: 30px; /* Add space between the game container and the footer */
+            padding: 10px 0; /* Add some padding to the top and bottom */
+            font-size: 16px;
+            color: #666; /* Adjust color as needed */
+            font-family: 'Pixel-Font', sans-serif; /* Use your custom font */
+            width: 100%;
+        }
+        #logo-container {
+            margin-top: 10px; /* Add space between text and logos */
+            display: flex; /* Use flexbox for horizontal layout */
+            justify-content: center; /* Center logos horizontally */
+            align-items: center; /* Center logos vertically */
+        }
+
+        .tool-logo {
+            width: 30px; /* Adjust logo size as needed */
+            height: 30px;
+            margin: 0 5px; /* Add spacing between logos */
+        }
     </style>
 </head>
 <body>
@@ -287,6 +308,16 @@
             <button id="restart-button">
                 <img src="images/start-button.png" alt="Start">
             </button>
+        </div>
+    </div>
+    <div id="game-footer">
+        Created by Amparo Oliver
+        <div id="logo-container">
+            <img src="images/figma.png" alt="Figma Logo" class="tool-logo">
+            <img src="images/aseprite.png" alt="Aseprite Logo" class="tool-logo">
+            <img src="images/javascript.png" alt="JavaScript Logo" class="tool-logo">
+            <img src="images/html5.png" alt="HTML Logo" class="tool-logo">
+            <img src="images/css.png" alt="CSS Logo" class="tool-logo">
         </div>
     </div>
 
