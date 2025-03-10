@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ocean Game - Enjoy!</title>
+    <title>Ocean Run - Enjoy!</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column; /* Change to column */
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 70vh;
             background-color: #FBF8EF;
             font-family: 'Courier New', monospace;
             touch-action: manipulation; /* Prevents double-tap zoom on touch devices */
+        }
+
+        @font-face {
+            font-family: 'Pixel-Font';
+            src: url('fonts/04B_30__.TTF') format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
         
         #game-container {
@@ -238,12 +246,28 @@
             }
             
             #instructions {
-                font-size: 14px;
+                font-size: 15px;
             }
+        }
+        #game-title {
+            text-align: center; /* Center the text horizontally */
+            font-size: 50px; /* Adjust font size as needed */
+            font-weight: bold; /* Make the text bold */
+            letter-spacing: 5px;
+            margin-bottom: 70px; /* Add some space between the title and the game container */
+            color: #DEAA79; /* Set the text color */
+            font-family: 'Pixel-Font', sans-serif; /* Add your custom font */
+        }
+
+        .game-over-font {
+            font-family: 'Pixel-Font', sans-serif;
+            font-size: 70%;
+            letter-spacing: 5px;
         }
     </style>
 </head>
 <body>
+    <div id="game-title">Ocean Runner</div>
     <div id="game-container">
         <div id="fish"></div>
         <div class="lane-marker" style="top: 75px;"></div>
@@ -259,7 +283,7 @@
         <div id="up-button" class="touch-button">↑</div>
         <div id="down-button" class="touch-button">↓</div>
         <div class="game-over">
-            <div>GAME OVER</div>
+            <div class="game-over-font">GAME OVER</div>
             <button id="restart-button">
                 <img src="images/start-button.png" alt="Start">
             </button>
