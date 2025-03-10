@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ocean Runner Game</title>
+    <title>Ocean Game - Enjoy!</title>
     <style>
         body {
             margin: 0;
@@ -14,6 +14,7 @@
             height: 100vh;
             background-color: #FBF8EF;
             font-family: 'Courier New', monospace;
+            touch-action: manipulation; /* Prevents double-tap zoom on touch devices */
         }
         
         #game-container {
@@ -25,6 +26,7 @@
             /*border: 5px solid #B4EBE6;*/
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            max-width: 100%;
         }
         
         #score {
@@ -154,6 +156,78 @@
         .start-button-text {
             color: white;
         }
+                /* Touch controls */
+                .touch-control {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            z-index: 5;
+            display: none; /* Hidden by default, shown on touch devices */
+        }
+        
+        #touch-up {
+            left: 0;
+            top: 0;
+        }
+        
+        #touch-down {
+            right: 0;
+            top: 0;
+        }
+        
+        /* Touch button indicators */
+        .touch-button {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            display: none; /* Hidden by default, shown on touch devices */
+        }
+        
+        #up-button {
+            left: 40px;
+            bottom: 40px;
+        }
+        
+        #down-button {
+            right: 40px;
+            bottom: 40px;
+        }
+        
+        /* Instructions */
+        #instructions {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            opacity: 0.8;
+            z-index: 5;
+        }
+        
+        /* For responsive design */
+        @media (max-width: 800px) {
+            #game-container {
+                width: 100%;
+                height: 250px;
+            }
+            
+            .touch-control, .touch-button {
+                display: block; /* Show on small screens */
+            }
+            
+            #instructions {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -164,6 +238,13 @@
         <div class="lane-marker" style="top: 225px;"></div>
         <div id="ocean-floor"></div>
         <div id="score">Score: 0</div>
+        <div id="instructions">Use Arrow Keys or tap Left/Right sides to move</div>
+        
+        <!-- Touch controls -->
+        <div id="touch-up" class="touch-control"></div>
+        <div id="touch-down" class="touch-control"></div>
+        <div id="up-button" class="touch-button">↑</div>
+        <div id="down-button" class="touch-button">↓</div>
         <div class="game-over">
             <div>GAME OVER</div>
             <button class="start-button-text" id="restart-button">Play Again</button>
@@ -395,9 +476,43 @@
             gameOverScreen.style.display = 'block';
         }
         
+        // Touch controls
+        const touchUp = document.getElementById('touch-up');
+        const touchDown = document.getElementById('touch-down');
+        const upButton = document.getElementById('up-button');
+        const downButton = document.getElementById('down-button');
+
+        // Show touch controls on mobile devices
+        function detectTouchDevice() {
+            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+                // This is a touch device
+                touchUp.style.display = 'block';
+                touchDown.style.display = 'block';
+                upButton.style.display = 'flex';
+                downButton.style.display = 'flex';
+                
+                // Update instructions for touch
+                document.getElementById('instructions').textContent = 'Tap Left side to move up, Right side to move down';
+            }
+        }
+
+        // Touch event listeners
+        touchUp.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Prevent default behavior
+            moveFishUp();
+        });
+
+        touchDown.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Prevent default behavior
+            moveFishDown();
+        });
+        
         // Event listeners
         document.addEventListener('keydown', control);
         restartButton.addEventListener('click', startGame);
+        
+        // Call detect function when page loads
+        detectTouchDevice();
         
         // Start the game
         startGame();
