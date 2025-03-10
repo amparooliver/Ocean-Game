@@ -1,0 +1,270 @@
+@font-face {
+    font-family: 'Pixel-Font';
+    src: url('fonts/04B_30__.TTF') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background-color: #FBF8EF;
+    font-family: 'Courier New', monospace;
+    touch-action: manipulation; /* Prevents double-tap zoom on touch devices */
+}
+
+#game-container {
+    position: relative;
+    width: 600px;
+    height: 300px;
+    overflow: hidden;
+    background-color: #B4EBE6;
+    /*border: 5px solid #B4EBE6;*/
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    max-width: 100%;
+}
+
+#score {
+    position: absolute;
+    font-weight: bold;
+    top: 15px;
+    right: 15px;
+    color: white;
+    font-size: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#fish {
+    position: absolute;
+    width: 80px; 
+    height: 80px; 
+    left: 40px;
+    background-image: url('images/pink-fish.png'); /* Replace with your image path */
+    background-size: contain; /* or cover, or specific dimensions */
+    background-repeat: no-repeat;
+    transition: top 0.2s ease;
+    z-index: 1;
+}
+   
+.lane-marker {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.obstacle {
+    position: absolute;
+}
+     
+.star {
+    width: 60px; 
+    height: 60px; 
+    left: 40px;
+    background-image: url('images/star.png'); /* Replace with your image path */
+    background-size: contain; /* or cover, or specific dimensions */
+    background-repeat: no-repeat;
+}
+
+.orange-starfish {
+    width: 60px; 
+    height: 60px; 
+    left: 40px;
+    background-image: url('images/Orange-Starfish.png'); /* Replace with your image path */
+    background-size: contain; /* or cover, or specific dimensions */
+    background-repeat: no-repeat;
+}
+.lilac-algae {
+    width: 60px; 
+    height: 60px; 
+    left: 40px;
+    background-image: url('images/lilac-algae.png'); /* Replace with your image path */
+    background-size: contain; /* or cover, or specific dimensions */
+    background-repeat: no-repeat;
+}
+.green-algae {
+    width: 60px; 
+    height: 60px; 
+    left: 40px;
+    background-image: url('images/green-algae.png'); /* Replace with your image path */
+    background-size: contain; /* or cover, or specific dimensions */
+    background-repeat: no-repeat;
+}
+
+.jellyfish {
+    width: 60px; 
+    height: 60px; 
+    left: 40px;
+    background-image: url('images/jellyfish.png'); /* Replace with your image path */
+    background-size: contain; /* or cover, or specific dimensions */
+    background-repeat: no-repeat;
+}
+
+.shark {
+    width: 135px; 
+    height: 125px; 
+    left: 40px;
+    background-image: url('images/shark.png'); /* Replace with your image path */
+    background-size: contain; /* or cover, or specific dimensions */
+    background-repeat: no-repeat;
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    font-stretch: semi-expanded;
+    text-align: center;
+    display: none;
+}
+
+.game-over button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #DEAA79;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Ocean floor */
+#ocean-floor {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    background-color: #E5D0AC;
+}
+
+/* Bubbles */
+.bubble {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.start-button-text {
+    color: white;
+}
+
+/* Touch controls */
+.touch-control {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    z-index: 5;
+    display: none; /* Hidden by default, shown on touch devices */
+}
+
+#touch-up {
+    left: 0;
+    top: 0;
+}
+
+#touch-down {
+    right: 0;
+    top: 0;
+}
+
+/* Touch button indicators */
+.touch-button {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: white;
+    display: none; /* Hidden by default, shown on touch devices */
+}
+
+#up-button {
+    left: 40px;
+    bottom: 40px;
+}
+
+#down-button {
+    right: 40px;
+    bottom: 40px;
+}
+
+/* Instructions */
+#instructions {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    opacity: 0.8;
+    z-index: 5;
+}
+
+#restart-button {
+    border: none;
+    background-color: transparent; /* Add this line */
+    cursor: pointer;
+}
+
+#restart-button img {
+    width: 70%; /* Make the image 80% of the button's width */
+    height: 70%; /* Make the image 80% of the button's height */
+}
+
+/* For responsive design */
+@media (max-width: 800px) {
+    #game-container {
+        width: 90%;
+        height: 300px;
+    }
+    
+    .touch-control, .touch-button {
+        display: block; /* Show on small screens */
+    }
+    
+    #instructions {
+        font-size: 14px;
+        white-space: pre-line;
+    }
+}
+.game-over-font {
+    font-family: 'Pixel-Font', sans-serif;
+    font-size: 70%;
+    letter-spacing: 5px;
+}
+#game-footer {
+    text-align: center;
+    margin-top: 30px; /* Add space between the game container and the footer */
+    padding: 10px 0; /* Add some padding to the top and bottom */
+    font-size: 16px;
+    color: #666; /* Adjust color as needed */
+    font-family: 'Pixel-Font', sans-serif; /* Use your custom font */
+    width: 100%;
+}
+#logo-container {
+    margin-top: 10px; /* Add space between text and logos */
+    display: flex; /* Use flexbox for horizontal layout */
+    justify-content: center; /* Center logos horizontally */
+    align-items: center; /* Center logos vertically */
+}
+
+.tool-logo {
+    width: 30px; /* Adjust logo size as needed */
+    height: 30px;
+    margin: 0 5px; /* Add spacing between logos */
+}
