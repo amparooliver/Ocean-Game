@@ -31,10 +31,12 @@
         
         #score {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            font-weight: bold;
+            top: 15px;
+            right: 15px;
             color: white;
             font-size: 24px;
+            font-family: Arial, Helvetica, sans-serif;
         }
         
         #fish {
@@ -116,9 +118,9 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -30%);
             color: white;
-            font-size: 32px;
+            font-size: 40px;
             font-weight: bold;
             font-stretch: semi-expanded;
             text-align: center;
@@ -126,7 +128,6 @@
         }
         
         .game-over button {
-            margin-top: 20px;
             padding: 10px 20px;
             font-size: 18px;
             background-color: #DEAA79;
@@ -156,8 +157,9 @@
         .start-button-text {
             color: white;
         }
-                /* Touch controls */
-                .touch-control {
+
+        /* Touch controls */
+        .touch-control {
             position: absolute;
             width: 50%;
             height: 100%;
@@ -212,12 +214,23 @@
             opacity: 0.8;
             z-index: 5;
         }
+
+        #restart-button {
+            border: none;
+            background-color: transparent; /* Add this line */
+            cursor: pointer;
+        }
+
+        #restart-button img {
+            width: 70%; /* Make the image 80% of the button's width */
+            height: 70%; /* Make the image 80% of the button's height */
+        }
         
         /* For responsive design */
         @media (max-width: 800px) {
             #game-container {
-                width: 100%;
-                height: 250px;
+                width: 90%;
+                height: 300px;
             }
             
             .touch-control, .touch-button {
@@ -238,7 +251,7 @@
         <div class="lane-marker" style="top: 225px;"></div>
         <div id="ocean-floor"></div>
         <div id="score">Score: 0</div>
-        <div id="instructions">Use Arrow Keys or tap Left/Right sides to move</div>
+        <div id="instructions">Use the Arrow Keys or tap Left/Right sides to move!</div>
         
         <!-- Touch controls -->
         <div id="touch-up" class="touch-control"></div>
@@ -247,7 +260,9 @@
         <div id="down-button" class="touch-button">↓</div>
         <div class="game-over">
             <div>GAME OVER</div>
-            <button class="start-button-text" id="restart-button">Play Again</button>
+            <button id="restart-button">
+                <img src="images/start-button.png" alt="Start">
+            </button>
         </div>
     </div>
 
@@ -275,12 +290,14 @@
         
        // Initialize game
        function startGame() {
+            document.getElementById('instructions').style.display = 'none'; // Hide the instructions
             isGameOver = false;
             score = 0;
             scoreDisplay.textContent = `Score: ${score}`;
             currentLane = 1; // Start in middle lane
             fish.style.top = `${lanes[currentLane]}px`;
             gameOverScreen.style.display = 'none';
+            detectTouchDevice();
             laneOccupied = [false, false, false];
             
             // Remove all obstacles
@@ -474,6 +491,11 @@
             clearInterval(bubbleInterval);
             clearInterval(scoreInterval);
             gameOverScreen.style.display = 'block';
+            document.getElementById('instructions').style.display = 'block'
+            document.getElementById('touch-up').style.display = 'none'
+            document.getElementById('touch-down').style.display = 'none'
+            document.getElementById('up-button').style.display = 'none'
+            document.getElementById('down-button').style.display = 'none'
         }
         
         // Touch controls
