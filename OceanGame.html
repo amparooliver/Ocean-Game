@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Runner Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #FBF8EF;
+            font-family: 'Courier New', monospace;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 600px;
+            height: 300px;
+            overflow: hidden;
+            background-color: #B4EBE6;
+            /*border: 5px solid #B4EBE6;*/
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        #score {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 24px;
+        }
+        
+        #fish {
+            position: absolute;
+            width: 80px; 
+            height: 80px; 
+            left: 40px;
+            background-image: url('images/pink-fish.png'); /* Replace with your image path */
+            background-size: contain; /* or cover, or specific dimensions */
+            background-repeat: no-repeat;
+            transition: top 0.2s ease;
+            z-index: 1;
+        }
+           
+        .lane-marker {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .obstacle {
+            position: absolute;
+        }
+             
+        .star {
+            width: 60px; 
+            height: 60px; 
+            left: 40px;
+            background-image: url('images/star.png'); /* Replace with your image path */
+            background-size: contain; /* or cover, or specific dimensions */
+            background-repeat: no-repeat;
+        }
+
+        .orange-starfish {
+            width: 60px; 
+            height: 60px; 
+            left: 40px;
+            background-image: url('images/Orange-Starfish.png'); /* Replace with your image path */
+            background-size: contain; /* or cover, or specific dimensions */
+            background-repeat: no-repeat;
+        }
+        .lilac-algae {
+            width: 60px; 
+            height: 60px; 
+            left: 40px;
+            background-image: url('images/lilac-algae.png'); /* Replace with your image path */
+            background-size: contain; /* or cover, or specific dimensions */
+            background-repeat: no-repeat;
+        }
+        .green-algae {
+            width: 60px; 
+            height: 60px; 
+            left: 40px;
+            background-image: url('images/green-algae.png'); /* Replace with your image path */
+            background-size: contain; /* or cover, or specific dimensions */
+            background-repeat: no-repeat;
+        }
+
+        .jellyfish {
+            width: 60px; 
+            height: 60px; 
+            left: 40px;
+            background-image: url('images/jellyfish.png'); /* Replace with your image path */
+            background-size: contain; /* or cover, or specific dimensions */
+            background-repeat: no-repeat;
+        }
+
+        .shark {
+            width: 135px; 
+            height: 125px; 
+            left: 40px;
+            background-image: url('images/shark.png'); /* Replace with your image path */
+            background-size: contain; /* or cover, or specific dimensions */
+            background-repeat: no-repeat;
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            font-stretch: semi-expanded;
+            text-align: center;
+            display: none;
+        }
+        
+        .game-over button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #DEAA79;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* Ocean floor */
+        #ocean-floor {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            background-color: #E5D0AC;
+        }
+        
+        /* Bubbles */
+        .bubble {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .start-button-text {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="fish"></div>
+        <div class="lane-marker" style="top: 75px;"></div>
+        <div class="lane-marker" style="top: 150px;"></div>
+        <div class="lane-marker" style="top: 225px;"></div>
+        <div id="ocean-floor"></div>
+        <div id="score">Score: 0</div>
+        <div class="game-over">
+            <div>GAME OVER</div>
+            <button class="start-button-text" id="restart-button">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        const fish = document.getElementById('fish');
+        const gameContainer = document.getElementById('game-container');
+        const scoreDisplay = document.getElementById('score');
+        const gameOverScreen = document.querySelector('.game-over');
+        const restartButton = document.getElementById('restart-button');
+        
+        let isGameOver = false;
+        let score = 0;
+        let currentLane = 1; // 0 = top, 1 = middle, 2 = bottom
+        let laneOccupied = [false, false, false]; // Keep track of which lanes have obstacles
+        
+        // Lane positions (y-coordinates)
+        const lanes = [25, 100, 175];
+        
+        // Game constants
+        const CONTAINER_HEIGHT = 300;
+        const FISH_HEIGHT = 30;
+        const OBSTACLE_SPAWN_RATE = 1500; // ms
+        const BUBBLE_SPAWN_RATE = 300; // ms
+        
+       // Initialize game
+       function startGame() {
+            isGameOver = false;
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+            currentLane = 1; // Start in middle lane
+            fish.style.top = `${lanes[currentLane]}px`;
+            gameOverScreen.style.display = 'none';
+            laneOccupied = [false, false, false];
+            
+            // Remove all obstacles
+            document.querySelectorAll('.obstacle').forEach(obstacle => {
+                obstacle.remove();
+            });
+            
+            // Remove all bubbles
+            document.querySelectorAll('.bubble').forEach(bubble => {
+                bubble.remove();
+            });
+            
+            // Start game loops
+            obstacleInterval = setInterval(createObstacle, OBSTACLE_SPAWN_RATE);
+            bubbleInterval = setInterval(createBubble, BUBBLE_SPAWN_RATE);
+            scoreInterval = setInterval(updateScore, 100);
+        }
+        
+        // Control the fish
+        function control(e) {
+            if (isGameOver) return;
+            
+            if (e.key === 'ArrowUp' || e.key === 'w') {
+                moveFishUp();
+            } else if (e.key === 'ArrowDown' || e.key === 's') {
+                moveFishDown();
+            }
+        }
+        
+        // Move fish up one lane
+        function moveFishUp() {
+            if (currentLane > 0) {
+                currentLane--;
+                fish.style.top = `${lanes[currentLane]}px`;
+            }
+        }
+        
+        // Move fish down one lane
+        function moveFishDown() {
+            if (currentLane < 2) {
+                currentLane++;
+                fish.style.top = `${lanes[currentLane]}px`;
+            }
+        }
+        
+        // Create obstacles
+        function createObstacle() {
+            if (isGameOver) return;
+            
+            const obstacleTypes = ['star', 'orange-starfish', 'shark', 'jellyfish','lilac-algae','green-algae']; // Add your new obstacle types here
+            const obstacleType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+            
+            // Choose lane based on obstacle type
+            let obstacleLane;
+            
+            if (obstacleType == 'star' ||  obstacleType == 'orange-starfish'||  obstacleType == 'lilac-algae'||  obstacleType == 'green-algae') {
+                // star only appears on the bottom lane (ocean floor)
+                obstacleLane = 2;
+                
+                // If bottom lane is already occupied, skip generating this obstacle
+                if (laneOccupied[2]) {
+                    return;
+                }
+            } else { // Squid can appear in any lane
+                // Find available lanes (not already occupied)
+                const availableLanes = [];
+                for (let i = 0; i < 2; i++) {
+                    if (!laneOccupied[i]) {
+                        availableLanes.push(i);
+                    }
+                }
+                
+                // If all lanes are occupied, skip generating this obstacle
+                if (availableLanes.length == 0) {
+                    return;
+                }
+                
+                // Select a random available lane
+                obstacleLane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
+            }
+            
+            // Mark the lane as occupied
+            laneOccupied[obstacleLane] = true;
+            
+            const obstacle = document.createElement('div');
+            obstacle.classList.add('obstacle');
+            obstacle.classList.add(obstacleType);
+            
+            if(obstacleLane == 2){
+                obstacle.style.top = `${lanes[obstacleLane]+55}px`;
+            }
+            else{
+                obstacle.style.top = `${lanes[obstacleLane]+5}px`;
+            }
+            
+            obstacle.style.left = `${gameContainer.offsetWidth}px`;
+            gameContainer.appendChild(obstacle);
+            
+            // Store the lane in a data attribute for collision detection
+            obstacle.dataset.lane = obstacleLane;
+            
+            // Move obstacle
+            let obstacleLeft = gameContainer.offsetWidth;
+            let obstacleTimer = setInterval(() => {
+                if (obstacleLeft < -50) {
+                    // Remove obstacle when it's off-screen and mark the lane as available again
+                    clearInterval(obstacleTimer);
+                    laneOccupied[obstacleLane] = false;
+                    obstacle.remove();
+                } else {
+                    obstacleLeft -= 5;
+                    obstacle.style.left = `${obstacleLeft}px`;
+                    
+                    // Collision detection
+                    checkCollision(obstacle, parseInt(obstacle.dataset.lane));
+                }
+            }, 20);
+        }
+        
+        // Create bubbles for visual effect
+        function createBubble() {
+            if (isGameOver) return;
+            
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            
+            const bubbleSize = Math.floor(Math.random() * 15) + 5;
+            bubble.style.width = `${bubbleSize}px`;
+            bubble.style.height = `${bubbleSize}px`;
+            
+            const bubbleTop = Math.floor(Math.random() * (CONTAINER_HEIGHT - 50));
+            bubble.style.top = `${bubbleTop}px`;
+            bubble.style.left = `${gameContainer.offsetWidth}px`;
+            
+            gameContainer.appendChild(bubble);
+            
+            // Move bubble
+            let bubbleLeft = gameContainer.offsetWidth;
+            let bubbleTimer = setInterval(() => {
+                if (bubbleLeft < -20) {
+                    clearInterval(bubbleTimer);
+                    bubble.remove();
+                } else {
+                    bubbleLeft -= 3;
+                    bubble.style.left = `${bubbleLeft}px`;
+                    
+                    // Make bubbles float upward slightly
+                    const currentTop = parseInt(bubble.style.top);
+                    if (currentTop > 0) {
+                        bubble.style.top = `${currentTop - 1}px`;
+                    }
+                }
+            }, 50);
+        }
+        
+        // Check for collisions
+        function checkCollision(obstacle, obstacleLane) {
+            const fishLeft = 50;
+            const fishRight = 110; // 50 + 60 (fish width)
+            const obstacleLeft = parseInt(obstacle.style.left);
+            const obstacleRight = obstacleLeft + (obstacle.classList.contains('squid') ? 30 : 20);
+            
+            // Check if obstacle is in same horizontal space as fish
+            if (fishRight > obstacleLeft && fishLeft < obstacleRight) {
+                // Check if in same lane
+                if (currentLane === obstacleLane) {
+                    gameOver();
+                }
+            }
+        }
+        
+        // Update score
+        function updateScore() {
+            if (isGameOver) return;
+            
+            score++;
+            scoreDisplay.textContent = `Score: ${score}`;
+            
+            // Increase game speed based on score
+            if (score % 500 === 0) {
+                clearInterval(obstacleInterval);
+                const newRate = Math.max(500, OBSTACLE_SPAWN_RATE - (score / 500) * 100);
+                obstacleInterval = setInterval(createObstacle, newRate);
+            }
+        }
+        
+        // Game over
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(obstacleInterval);
+            clearInterval(bubbleInterval);
+            clearInterval(scoreInterval);
+            gameOverScreen.style.display = 'block';
+        }
+        
+        // Event listeners
+        document.addEventListener('keydown', control);
+        restartButton.addEventListener('click', startGame);
+        
+        // Start the game
+        startGame();
+    </script>
+</body>
+</html>
