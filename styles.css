@@ -16,6 +16,15 @@ body {
     touch-action: manipulation; /* Prevents double-tap zoom on touch devices */
 }
 
+#game-title {
+    text-align: center;
+    margin-bottom: 30px; /* Add space between the game container and the footer */
+    font-size: 50px;
+    color: #666; /* Adjust color as needed */
+    font-family: 'Pixel-Font', sans-serif; /* Use your custom font */
+    width: 100%;
+}
+
 #game-container {
     position: relative;
     width: 600px;
@@ -264,14 +273,7 @@ body {
     font-family: 'Pixel-Font', sans-serif; /* Use your custom font */
     width: 100%;
 }
-#game-title {
-    text-align: center;
-    margin-bottom: 30px; /* Add space between the game container and the footer */
-    font-size: 50px;
-    color: #666; /* Adjust color as needed */
-    font-family: 'Pixel-Font', sans-serif; /* Use your custom font */
-    width: 100%;
-}
+
 #logo-container {
     margin-top: 10px; /* Add space between text and logos */
     display: flex; /* Use flexbox for horizontal layout */
