@@ -13,7 +13,6 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #FBF8EF;
-    font-family: 'Courier New', monospace;
     touch-action: manipulation; /* Prevents double-tap zoom on touch devices */
 }
 
@@ -219,6 +218,7 @@ body {
     text-align: center;
     color: white;
     font-size: 16px;
+    font-family: 'Courier New', monospace;
     opacity: 0.8;
     z-index: 5;
 }
