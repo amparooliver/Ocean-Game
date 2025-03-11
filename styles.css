@@ -104,6 +104,14 @@ body {
     background-size: contain; /* or cover, or specific dimensions */
     background-repeat: no-repeat;
 }
+.anglerfish {
+    width: 70px; 
+    height: 70px; 
+    left: 40px;
+    background-image: url('images/anglerfish.png'); /* Replace with your image path */
+    background-size: contain; /* or cover, or specific dimensions */
+    background-repeat: no-repeat;
+}
 
 .shark {
     width: 135px; 
@@ -252,6 +260,14 @@ body {
     margin-top: 30px; /* Add space between the game container and the footer */
     padding: 10px 0; /* Add some padding to the top and bottom */
     font-size: 16px;
+    color: #666; /* Adjust color as needed */
+    font-family: 'Pixel-Font', sans-serif; /* Use your custom font */
+    width: 100%;
+}
+#game-title {
+    text-align: center;
+    margin-bottom: 30px; /* Add space between the game container and the footer */
+    font-size: 50px;
     color: #666; /* Adjust color as needed */
     font-family: 'Pixel-Font', sans-serif; /* Use your custom font */
     width: 100%;

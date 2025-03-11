@@ -9,6 +9,9 @@
     </style>
 </head>
 <body>
+    <div id="game-title">
+        Ocean Run
+    </div>
     <div id="game-container">
         <div id="fish"></div>
         <div class="lane-marker" style="top: 75px;"></div>
@@ -122,7 +125,7 @@
         function createObstacle() {
             if (isGameOver) return;
             
-            const obstacleTypes = ['star', 'orange-starfish', 'shark', 'jellyfish','lilac-algae','green-algae']; // Add your new obstacle types here
+            const obstacleTypes = ['star', 'orange-starfish', 'shark', 'jellyfish','lilac-algae','green-algae','anglerfish']; // Add your new obstacle types here
             const obstacleType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
             
             // Choose lane based on obstacle type
