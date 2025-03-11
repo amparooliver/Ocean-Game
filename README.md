@@ -1,4 +1,4 @@
-# 🌊 Ocean Run: Just Keep Swimming! 🐟
+# 🌊 Ocean Run: Just Keep Swimming!! 🐟
 
 ![Game Design](images/GameDesign.png)
 
